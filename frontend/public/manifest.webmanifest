@@ -1,0 +1,37 @@
+{
+  "name": "Learning-Tool Bundeswehr-Dienstgrade",
+  "short_name": "DG Learner",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui", "browser"],
+  "orientation": "portrait-primary",
+  "background_color": "#09111d",
+  "theme_color": "#133a63",
+  "lang": "de-DE",
+  "description": "Responsive Lern-App zum Trainieren von Bundeswehr-Dienstgraden mit lokalem Lernstand.",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Training starten",
+      "short_name": "Training",
+      "url": "/?view=training",
+      "description": "Direkt in die Trainingsansicht springen."
+    },
+    {
+      "name": "Statistik ansehen",
+      "short_name": "Statistik",
+      "url": "/?view=stats",
+      "description": "Den lokalen Lernstand direkt aufrufen."
+    }
+  ]
+}
