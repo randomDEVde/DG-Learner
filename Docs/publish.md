@@ -71,7 +71,7 @@ Er erzeugt:
 
 - Windows als `MSI`
 - Linux als `.deb` und `AppImage`
-- macOS als `DMG`
+- macOS als App-Bundle und `DMG`
 
 Der Workflow läuft bei:
 
@@ -101,7 +101,7 @@ Für native Downloads nutzen Endnutzer stattdessen die Release-Artefakte:
 
 - unter Windows bevorzugt die `MSI`
 - unter Linux `.deb` oder `AppImage`
-- unter macOS das `DMG`
+- unter macOS das `DMG` oder das rohe App-Bundle
 
 ## 8. Lokaler Start für Entwickler
 
@@ -128,3 +128,7 @@ Lokal gilt:
 - Windows-Builds inklusive `MSI` werden auf einem Windows-System oder dem Windows-GitHub-Runner erzeugt
 - macOS-Builds werden auf macOS erzeugt
 - Linux-Builds werden auf Linux erzeugt
+
+Zusätzlicher Hinweis:
+
+- der Windows-Installer nutzt jetzt einen festen WiX-Upgrade-Code, damit spätere MSI-Updates nicht als komplett neue Anwendung behandelt werden
