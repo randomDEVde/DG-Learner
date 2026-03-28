@@ -6,6 +6,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FRONTEND_DIR="$ROOT_DIR/frontend"
 BACKEND_DIR="$ROOT_DIR/backend"
 BACKEND_VENV_DIR="$BACKEND_DIR/.venv"
+FRONTEND_MODE="${1:-preview}"
 
 cleanup() {
   if [[ -n "${BACKEND_PID:-}" ]]; then
@@ -30,10 +31,15 @@ ensure_frontend_dependencies() {
   require_command "node" "Bitte Node.js installieren."
   require_command "npm" "Bitte npm installieren."
 
-  if [[ ! -d "$FRONTEND_DIR/node_modules" ]] || [[ "$FRONTEND_DIR/package.json" -nt "$FRONTEND_DIR/node_modules" ]]; then
+  if [[ ! -d "$FRONTEND_DIR/node_modules" ]] || [[ "$FRONTEND_DIR/package.json" -nt "$FRONTEND_DIR/node_modules" ]] || [[ "$FRONTEND_DIR/package-lock.json" -nt "$FRONTEND_DIR/node_modules" ]]; then
     echo "Installiere Frontend-Abhaengigkeiten..."
     (cd "$FRONTEND_DIR" && npm install)
   fi
+}
+
+build_frontend() {
+  echo "Erzeuge Produktions-Build fuer installierbare Vorschau..."
+  (cd "$FRONTEND_DIR" && npm run build)
 }
 
 ensure_backend_dependencies() {
@@ -77,9 +83,19 @@ if [[ ! -d "$FRONTEND_DIR/node_modules" ]]; then
 fi
 
 start_backend
-echo "Frontend startet gleich auf:"
+
+if [[ "$FRONTEND_MODE" == "--dev" ]]; then
+  echo "Frontend startet im Entwicklungsmodus:"
+  echo "  Lokal: http://localhost:5173"
+  echo "  Hinweis: In diesem Modus erscheint der PWA-Installationsbutton in Browsern meist nicht."
+
+  cd "$FRONTEND_DIR"
+  exec npm run dev
+fi
+
+build_frontend
+echo "Frontend startet als installierbare Vorschau:"
 echo "  Lokal: http://localhost:5173"
-echo "  Im WLAN: http://<deine-ip>:5173"
 
 cd "$FRONTEND_DIR"
-exec npm run dev -- --host
+exec npm run preview -- --port 5173

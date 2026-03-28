@@ -1,10 +1,10 @@
-import { getBranchLabel } from "../utils/logic";
+import { getBranchLabel, getCategoryLabel } from "../utils/logic";
 
 export default function StatsPage({ session, onBack }) {
   const labels = {
-    "image-input": "Bild -> Dienstgrad eingeben",
-    "image-choice": "Bild -> Klartext",
-    "text-choice": "Klartext -> Bild",
+    "image-input": "Bild mit Texteingabe",
+    "image-choice": "Bild mit Auswahl",
+    "text-choice": "Text mit Bildauswahl",
     organigram: "Organigramm",
   };
 
@@ -34,6 +34,17 @@ export default function StatsPage({ session, onBack }) {
     return acc;
   }, {});
 
+  const byCategory = session.history.reduce((acc, entry) => {
+    if (!acc[entry.category]) {
+      acc[entry.category] = { answered: 0, correct: 0 };
+    }
+    acc[entry.category].answered += 1;
+    if (entry.outcome === "correct") {
+      acc[entry.category].correct += 1;
+    }
+    return acc;
+  }, {});
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -50,13 +61,13 @@ export default function StatsPage({ session, onBack }) {
         </button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <div className="grid gap-4 md:grid-cols-3">
+        <section className="rounded-3xl border border-white/15 bg-white/10 p-6 backdrop-blur-sm">
           <h3 className="text-lg font-semibold text-white">Erfolgsquote je Teilstreitkraft</h3>
           <div className="mt-4 space-y-3">
             {Object.entries(byBranch).length ? (
               Object.entries(byBranch).map(([branch, stats]) => (
-                <div key={branch} className="rounded-2xl bg-black/20 p-4">
+                <div key={branch} className="rounded-2xl bg-black/25 p-4">
                   <div className="flex items-center justify-between text-white">
                     <span>{getBranchLabel(branch)}</span>
                     <span>{stats.answered ? Math.round((stats.correct / stats.answered) * 100) : 0}%</span>
@@ -72,14 +83,35 @@ export default function StatsPage({ session, onBack }) {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <section className="rounded-3xl border border-white/15 bg-white/10 p-6 backdrop-blur-sm">
           <h3 className="text-lg font-semibold text-white">Erfolgsquote je Modus</h3>
           <div className="mt-4 space-y-3">
             {Object.entries(byMode).length ? (
               Object.entries(byMode).map(([mode, stats]) => (
-                <div key={mode} className="rounded-2xl bg-black/20 p-4">
+                <div key={mode} className="rounded-2xl bg-black/25 p-4">
                   <div className="flex items-center justify-between text-white">
                     <span>{labels[mode] ?? mode}</span>
+                    <span>{stats.answered ? Math.round((stats.correct / stats.answered) * 100) : 0}%</span>
+                  </div>
+                  <p className="mt-1 text-sm text-sand/65">
+                    {stats.correct} von {stats.answered} korrekt beantwortet
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-sand/70">Noch keine Ergebnisse vorhanden.</p>
+            )}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-white/15 bg-white/10 p-6 backdrop-blur-sm">
+          <h3 className="text-lg font-semibold text-white">Erfolgsquote je Kategorie</h3>
+          <div className="mt-4 space-y-3">
+            {Object.entries(byCategory).length ? (
+              Object.entries(byCategory).map(([category, stats]) => (
+                <div key={category} className="rounded-2xl bg-black/25 p-4">
+                  <div className="flex items-center justify-between text-white">
+                    <span>{getCategoryLabel(category)}</span>
                     <span>{stats.answered ? Math.round((stats.correct / stats.answered) * 100) : 0}%</span>
                   </div>
                   <p className="mt-1 text-sm text-sand/65">

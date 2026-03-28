@@ -5,20 +5,20 @@ export default {
     extend: {
       colors: {
         ink: {
-          950: "#09111d",
-          900: "#102033",
-          800: "#16314c",
+          950: "#2f3034",
+          900: "#4b4c52",
+          800: "#6f7076",
         },
-        sand: "#e7dcc6",
-        brass: "#c4a45d",
-        signal: "#56c0ac",
-        alert: "#f07f5a",
+        sand: "#f7f7f8",
+        brass: "#ff1208",
+        signal: "#a4a4a8",
+        alert: "#ff1208",
       },
       boxShadow: {
-        panel: "0 24px 60px rgba(4, 10, 20, 0.35)",
+        panel: "0 24px 60px rgba(60, 60, 63, 0.2)",
       },
       fontFamily: {
-        display: ["Georgia", "serif"],
+        display: ["ui-sans-serif", "system-ui", "sans-serif"],
         body: ["ui-sans-serif", "system-ui", "sans-serif"],
       },
     },

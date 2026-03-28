@@ -7,18 +7,11 @@ function detectStandalone() {
   );
 }
 
-function detectIos() {
-  return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
-}
-
 export function usePwaInstall() {
   const [installPrompt, setInstallPrompt] = useState(null);
   const [isInstalled, setIsInstalled] = useState(() => detectStandalone());
-  const [isIos, setIsIos] = useState(false);
 
   useEffect(() => {
-    setIsIos(detectIos());
-
     const onBeforeInstallPrompt = (event) => {
       event.preventDefault();
       setInstallPrompt(event);
@@ -65,7 +58,5 @@ export function usePwaInstall() {
     canInstall: Boolean(installPrompt),
     install,
     isInstalled,
-    isIos,
-    showIosHint: isIos && !isInstalled && !installPrompt,
   };
 }

@@ -21,8 +21,8 @@ export default function BranchSelector({ value, onChange }) {
           onClick={() => toggle(branch.id)}
           className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
             value.includes(branch.id)
-              ? "border-signal bg-signal/15 text-white"
-              : "border-white/10 bg-white/5 text-sand/80"
+              ? "border-brass bg-brass/15 text-white"
+              : "border-white/15 bg-white/10 text-sand/85 hover:border-brass/40"
           }`}
         >
           {branch.label}
