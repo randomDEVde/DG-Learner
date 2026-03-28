@@ -414,7 +414,7 @@ Für native Pakete ist zusätzlich ein Tauri-Setup vorhanden.
 
 Zielplattformen:
 
-- Windows als `MSI`
+- Windows als `.exe`
 - Linux als `.deb` und `AppImage`
 - macOS als `DMG`
 

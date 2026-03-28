@@ -92,7 +92,7 @@ Eine konkrete Schritt-fuer-Schritt-Anleitung liegt hier:
 
 Das Repository ist jetzt auch fuer native Desktop-Builds vorbereitet:
 
-- Windows: bevorzugt als `MSI`
+- Windows: bevorzugt als `.exe`
 - Linux: als `.deb` und `AppImage`
 - macOS: als `DMG`
 

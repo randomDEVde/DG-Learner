@@ -37,7 +37,7 @@ git init
 git add .
 git commit -m "Initial release"
 git branch -M main
-git remote add origin <dein-github-repo>
+git remote add origin https://github.com/schmitzkonrad-hub/DG-Learner.git
 git push -u origin main
 ```
 
@@ -69,7 +69,7 @@ vorhanden.
 
 Er erzeugt:
 
-- Windows als `MSI`
+- Windows als `.exe`
 - Linux als `.deb` und `AppImage`
 - macOS als App-Bundle und `DMG`
 
@@ -87,6 +87,22 @@ git push origin v0.1.0
 
 Danach erstellt GitHub Actions einen Draft-Release mit den gebauten Desktop-Artefakten.
 
+Für dieses Repository konkret:
+
+- Repository: `https://github.com/schmitzkonrad-hub/DG-Learner`
+- Workflow: `Actions` -> `Build Desktop Releases`
+- EXE-Download nach erfolgreichem Lauf: `Releases` -> Draft-Release öffnen -> `.exe` herunterladen oder Release veröffentlichen
+
+Wenn bereits ein Commit-Stand auf `main` liegt, reicht für den nächsten EXE-Build also:
+
+```bash
+git add .
+git commit -m "Prepare release v0.1.0"
+git push origin main
+git tag v0.1.0
+git push origin v0.1.0
+```
+
 ## 7. Installation für Endnutzer
 
 Nach dem Deployment können Nutzer:
@@ -99,7 +115,7 @@ Damit läuft die Anwendung als Desktop-PWA in einem eigenen Fenster.
 
 Für native Downloads nutzen Endnutzer stattdessen die Release-Artefakte:
 
-- unter Windows bevorzugt die `MSI`
+- unter Windows bevorzugt die `.exe`
 - unter Linux `.deb` oder `AppImage`
 - unter macOS das `DMG` oder das rohe App-Bundle
 
@@ -125,10 +141,10 @@ Die native Build-Pipeline ist im Repository vorbereitet und für GitHub Actions 
 Lokal gilt:
 
 - für `tauri:build` werden Rust und die jeweiligen Plattform-Werkzeuge benötigt
-- Windows-Builds inklusive `MSI` werden auf einem Windows-System oder dem Windows-GitHub-Runner erzeugt
+- Windows-Builds inklusive `.exe` werden auf einem Windows-System oder dem Windows-GitHub-Runner erzeugt
 - macOS-Builds werden auf macOS erzeugt
 - Linux-Builds werden auf Linux erzeugt
 
 Zusätzlicher Hinweis:
 
-- der Windows-Installer nutzt jetzt einen festen WiX-Upgrade-Code, damit spätere MSI-Updates nicht als komplett neue Anwendung behandelt werden
+- der Windows-Installer wird jetzt als NSIS-Setup erzeugt und als `.exe` im GitHub-Release bereitgestellt

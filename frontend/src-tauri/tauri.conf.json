@@ -28,10 +28,10 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["deb", "appimage", "dmg", "msi"],
+    "targets": ["deb", "appimage", "dmg", "nsis"],
     "category": "Education",
-    "publisher": "BWI",
-    "homepage": "https://github.com/your-org/dg-learner",
+    "publisher": "Konrad Schmitz",
+    "homepage": "https://github.com/schmitzkonrad-hub/DG-Learner",
     "shortDescription": "Desktop-Lernanwendung für Bundeswehr-Dienstgrade",
     "longDescription": "Interaktive Desktop-Anwendung zum Trainieren von Bundeswehr-Dienstgraden mit lokaler Fortschrittsspeicherung.",
     "icon": [
@@ -41,12 +41,6 @@
       "icons/icon.ico",
       "icons/icon.icns"
     ],
-    "windows": {
-      "wix": {
-        "language": "de-DE",
-        "upgradeCode": "69a67a70-c30f-5ad4-a191-149337e2c764"
-      }
-    },
     "macOS": {
       "minimumSystemVersion": "11.0"
     },
