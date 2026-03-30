@@ -12,7 +12,7 @@ function resolvePublicPath(path) {
 
 export const BRANCHES = [
   { id: "heer", label: "Heer", accent: "#ff1208" },
-  { id: "marine", label: "Marine", accent: "#8f8f94" },
+  { id: "marine", label: "Marine", accent: "#1d4ed8" },
   { id: "luftwaffe", label: "Luftwaffe", accent: "#b0b0b4" },
 ];
 
