@@ -96,6 +96,13 @@ Das Repository ist jetzt auch fuer native Desktop-Builds vorbereitet:
 - Linux: als `.deb` und `AppImage`
 - macOS: als `DMG`
 
+Der empfohlene Weg fuer externe Windows-Nutzer ist:
+
+1. Release-Version vorbereiten
+2. Git-Tag pushen
+3. GitHub Actions baut automatisch die `.exe`
+4. Nutzer laden die `.exe` unter `Releases`
+
 Das Tauri-Setup liegt unter:
 
 - [frontend/src-tauri](/home/konrad/BWI/DG%20Learner/frontend/src-tauri)
@@ -103,6 +110,21 @@ Das Tauri-Setup liegt unter:
 Der Release-Workflow liegt unter:
 
 - [release-desktop.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/release-desktop.yml)
+
+Ein lokaler Helfer zum Synchronisieren der Release-Version liegt hier:
+
+- [prepare-release.sh](/home/konrad/BWI/DG%20Learner/prepare-release.sh)
+
+Beispiel:
+
+```bash
+./prepare-release.sh 0.1.1
+git add .
+git commit -m "Prepare release v0.1.1"
+git push origin main
+git tag v0.1.1
+git push origin v0.1.1
+```
 
 ## Start
 

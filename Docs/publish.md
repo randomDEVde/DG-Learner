@@ -81,9 +81,20 @@ Der Workflow läuft bei:
 Empfohlener Release-Ablauf:
 
 ```bash
+./prepare-release.sh 0.1.0
+git add .
+git commit -m "Prepare release v0.1.0"
+git push origin main
 git tag v0.1.0
 git push origin v0.1.0
 ```
+
+Der Helfer [prepare-release.sh](/home/konrad/BWI/DG%20Learner/prepare-release.sh) synchronisiert die
+Versionsnummer vor dem Tagging automatisch in:
+
+- [frontend/src-tauri/tauri.conf.json](/home/konrad/BWI/DG%20Learner/frontend/src-tauri/tauri.conf.json)
+- [frontend/src-tauri/Cargo.toml](/home/konrad/BWI/DG%20Learner/frontend/src-tauri/Cargo.toml)
+- [frontend/package.json](/home/konrad/BWI/DG%20Learner/frontend/package.json)
 
 Danach erstellt GitHub Actions einen Draft-Release mit den gebauten Desktop-Artefakten.
 
@@ -96,6 +107,7 @@ Für dieses Repository konkret:
 Wenn bereits ein Commit-Stand auf `main` liegt, reicht für den nächsten EXE-Build also:
 
 ```bash
+./prepare-release.sh 0.1.0
 git add .
 git commit -m "Prepare release v0.1.0"
 git push origin main
@@ -118,6 +130,13 @@ Für native Downloads nutzen Endnutzer stattdessen die Release-Artefakte:
 - unter Windows bevorzugt die `.exe`
 - unter Linux `.deb` oder `AppImage`
 - unter macOS das `DMG` oder das rohe App-Bundle
+
+Empfohlen fuer externe Windows-Nutzer:
+
+1. GitHub-Repository oeffnen
+2. `Releases` aufrufen
+3. die aktuelle `.exe` herunterladen
+4. Installer ausfuehren
 
 ## 8. Lokaler Start für Entwickler
 
