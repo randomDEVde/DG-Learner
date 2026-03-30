@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import BranchSelector from "./components/BranchSelector";
 import CategorySelector from "./components/CategorySelector";
 import CompletionDialog from "./components/CompletionDialog";
@@ -20,8 +20,10 @@ import {
   applySpacedRepetitionRating,
   createTask,
   gradeTask,
+  hydrateState,
   placeOnOrganigram,
   revealOrganigramStep,
+  STORAGE_KEY,
 } from "./utils/logic";
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
   const [inputValue, setInputValue] = useState("");
   const [showOrganigramCompleteDialog, setShowOrganigramCompleteDialog] = useState(false);
   const [pendingAutostart, setPendingAutostart] = useState(false);
+  const [showBackupPanel, setShowBackupPanel] = useState(false);
+  const backupInputRef = useRef(null);
   const activeTask = state.currentTask;
   const isSpacedRepetitionActive =
     state.selectedLearningMode === "spaced-repetition" && state.selectedMode !== "organigram";
@@ -467,6 +471,75 @@ function App() {
     }));
   };
 
+  const downloadBackup = () => {
+    const backupPayload = {
+      app: "DG Learner",
+      type: "learning-state-backup",
+      storageKey: STORAGE_KEY,
+      exportedAt: new Date().toISOString(),
+      state,
+    };
+    const blob = new Blob([JSON.stringify(backupPayload, null, 2)], {
+      type: "application/json",
+    });
+    const dateLabel = new Date().toISOString().slice(0, 10);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `dg-learner-backup-${dateLabel}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+
+    setState((current) => ({
+      ...current,
+      currentFeedback: {
+        status: "correct",
+        message: "Backup als JSON-Datei heruntergeladen.",
+      },
+    }));
+  };
+
+  const triggerBackupImport = () => {
+    backupInputRef.current?.click();
+  };
+
+  const handleBackupImport = async (event) => {
+    const [file] = event.target.files ?? [];
+    if (!file) {
+      return;
+    }
+
+    try {
+      const rawText = await file.text();
+      const parsed = JSON.parse(rawText);
+      const importedState = hydrateState(parsed?.state ?? parsed);
+
+      setState({
+        ...importedState,
+        currentView: "start",
+        currentTask: null,
+        currentFeedback: {
+          status: "correct",
+          message: `Backup "${file.name}" wurde importiert.`,
+        },
+      });
+      setInputValue("");
+      setShowOrganigramCompleteDialog(false);
+    } catch {
+      setState((current) => ({
+        ...current,
+        currentFeedback: {
+          status: "wrong",
+          message: "Import fehlgeschlagen. Bitte eine gueltige JSON-Backup-Datei waehlen.",
+        },
+      }));
+    } finally {
+      event.target.value = "";
+    }
+  };
+
   if (state.currentView === "stats") {
     return (
       <Shell>
@@ -558,12 +631,57 @@ function App() {
                 </button>
                 <button
                   type="button"
+                  onClick={() => setShowBackupPanel((current) => !current)}
+                  className="rounded-full border border-white/15 px-5 py-3 text-sm text-white"
+                >
+                  Backup
+                </button>
+                <button
+                  type="button"
                   onClick={resetAll}
                   className="rounded-full border border-alert/35 px-5 py-3 text-sm text-white"
                 >
                   Lernstand zurücksetzen
                 </button>
               </div>
+
+              <input
+                ref={backupInputRef}
+                type="file"
+                accept="application/json,.json"
+                className="hidden"
+                onChange={handleBackupImport}
+              />
+
+              {state.currentFeedback ? <FeedbackMessage feedback={state.currentFeedback} /> : null}
+
+              {showBackupPanel ? (
+                <div className="rounded-[1.6rem] border border-white/15 bg-black/20 p-5">
+                  <p className="text-sm uppercase tracking-[0.25em] text-sand/55">Backup</p>
+                  <h3 className="mt-2 text-xl font-semibold text-white">Lernstand sichern oder wiederherstellen</h3>
+                  <p className="mt-2 max-w-2xl text-sm leading-6 text-sand/70">
+                    Das Backup wird als JSON gespeichert. Das ist fuer diesen Anwendungsfall sinnvoller
+                    als CSV, weil Auswahl, Statistik, Spaced-Repetition-Daten und Einstellungen
+                    vollstaendig wiederhergestellt werden koennen.
+                  </p>
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    <button
+                      type="button"
+                      onClick={downloadBackup}
+                      className="rounded-full bg-brass px-5 py-3 text-sm font-semibold text-ink-950 transition hover:brightness-110"
+                    >
+                      Backup herunterladen
+                    </button>
+                    <button
+                      type="button"
+                      onClick={triggerBackupImport}
+                      className="rounded-full border border-white/15 px-5 py-3 text-sm text-white"
+                    >
+                      Backup importieren
+                    </button>
+                  </div>
+                </div>
+              ) : null}
             </div>
           </section>
 

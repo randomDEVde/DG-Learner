@@ -9,6 +9,7 @@ backend/app/__pycache__
 .idea
 *.log
 .DS_Store
+frontend/public/images/images_bak/
 # Lokale Helferskripte bleiben unversioniert; start-test.sh ist die Repo-Ausnahme.
 /*.sh
 !/start-test.sh

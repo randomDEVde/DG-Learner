@@ -1,5 +1,5 @@
-const APP_CACHE = "dg-learner-app-v4";
-const RUNTIME_CACHE = "dg-learner-runtime-v4";
+const APP_CACHE = "dg-learner-app-v5";
+const RUNTIME_CACHE = "dg-learner-runtime-v5";
 const APP_SHELL = [
   "./",
   "./manifest.webmanifest",

@@ -287,6 +287,35 @@ export function createInitialState() {
   };
 }
 
+export function hydrateState(parsed) {
+  const defaultState = createInitialState();
+  const validMode =
+    parsed?.selectedMode &&
+    ["image-input", "image-choice", "text-choice", "organigram"].includes(parsed.selectedMode)
+      ? parsed.selectedMode
+      : defaultState.selectedMode;
+  const validLearningMode =
+    parsed?.selectedLearningMode === "spaced-repetition" ||
+    parsed?.selectedLearningMode === "standard"
+      ? parsed.selectedLearningMode
+      : defaultState.selectedLearningMode;
+  const validBranches = parsed?.selectedBranches?.filter((branch) =>
+    BRANCHES.some((entry) => entry.id === branch),
+  );
+  const validCategories = parsed?.selectedCategories?.filter((category) =>
+    CATEGORIES.some((entry) => entry.id === category),
+  );
+
+  return {
+    ...defaultState,
+    ...parsed,
+    selectedMode: validMode,
+    selectedLearningMode: validMode === "organigram" ? "standard" : validLearningMode,
+    selectedBranches: validBranches?.length ? validBranches : defaultState.selectedBranches,
+    selectedCategories: validCategories?.length ? validCategories : defaultState.selectedCategories,
+  };
+}
+
 export function applySpacedRepetitionRating(spacedRepetition, task, rating) {
   if (!task?.correct) {
     return spacedRepetition;
@@ -326,30 +355,7 @@ export function loadState() {
       return createInitialState();
     }
     const parsed = JSON.parse(raw);
-    const defaultState = createInitialState();
-    const validMode =
-      parsed.selectedMode && ["image-input", "image-choice", "text-choice", "organigram"].includes(parsed.selectedMode)
-        ? parsed.selectedMode
-        : defaultState.selectedMode;
-    const validLearningMode =
-      parsed.selectedLearningMode === "spaced-repetition" || parsed.selectedLearningMode === "standard"
-        ? parsed.selectedLearningMode
-        : defaultState.selectedLearningMode;
-    const validBranches = parsed.selectedBranches?.filter((branch) =>
-      BRANCHES.some((entry) => entry.id === branch),
-    );
-    const validCategories = parsed.selectedCategories?.filter((category) =>
-      CATEGORIES.some((entry) => entry.id === category),
-    );
-
-    return {
-      ...defaultState,
-      ...parsed,
-      selectedMode: validMode,
-      selectedLearningMode: validMode === "organigram" ? "standard" : validLearningMode,
-      selectedBranches: validBranches?.length ? validBranches : defaultState.selectedBranches,
-      selectedCategories: validCategories?.length ? validCategories : defaultState.selectedCategories,
-    };
+    return hydrateState(parsed);
   } catch {
     return createInitialState();
   }
