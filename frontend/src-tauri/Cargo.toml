@@ -5,6 +5,10 @@ description = "Desktop-Lernanwendung für Bundeswehr-Dienstgrade"
 authors = ["Konrad"]
 edition = "2021"
 
+[lib]
+name = "dg_learner_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 
@@ -16,4 +20,3 @@ serde_json = "1"
 [features]
 default = ["custom-protocol"]
 custom-protocol = ["tauri/custom-protocol"]
-
