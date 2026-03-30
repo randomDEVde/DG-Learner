@@ -1,8 +1,10 @@
+import ShortcutButton from "./ShortcutButton";
+
 const OPTIONS = [
-  { id: "again", label: "Nochmal", note: "Wieder in etwa 1 Minute" },
-  { id: "hard", label: "Schlecht", note: "Wieder in etwa 6 Minuten" },
-  { id: "good", label: "Gut", note: "Wieder in etwa 10 Minuten" },
-  { id: "easy", label: "Einfach", note: "Wieder in etwa 3 Tagen" },
+  { id: "again", label: "Nochmal", note: "Wieder in etwa 1 Minute", shortcut: "1" },
+  { id: "hard", label: "Schlecht", note: "Wieder in etwa 6 Minuten", shortcut: "2" },
+  { id: "good", label: "Gut", note: "Wieder in etwa 10 Minuten", shortcut: "3" },
+  { id: "easy", label: "Einfach", note: "Wieder in etwa 3 Tagen", shortcut: "4" },
 ];
 
 export default function ReviewPanel({ visible, onRate }) {
@@ -19,15 +21,17 @@ export default function ReviewPanel({ visible, onRate }) {
       </p>
       <div className="mt-4 grid gap-3 md:grid-cols-4">
         {OPTIONS.map((option) => (
-          <button
+          <ShortcutButton
             key={option.id}
             type="button"
+            shortcut={option.shortcut}
+            tooltipLabel={`${option.label} mit ${option.shortcut} bewerten`}
             onClick={() => onRate(option.id)}
-            className="rounded-2xl border border-white/15 bg-black/20 p-4 text-left transition hover:border-brass/60"
+            className="w-full rounded-2xl border border-white/15 bg-black/20 p-4 text-left transition hover:border-brass/60"
           >
             <p className="font-semibold text-white">{option.label}</p>
             <p className="mt-1 text-sm text-sand/70">{option.note}</p>
-          </button>
+          </ShortcutButton>
         ))}
       </div>
     </div>

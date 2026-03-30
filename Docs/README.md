@@ -7,6 +7,7 @@ Diese Dokumentation beschreibt den aktuellen technischen Stand von `DG Learner`.
 - [Frontend](./frontend.md)
 - [Backend](./backend.md)
 - [Veröffentlichung und Releases](./publish.md)
+- [Mobile Builds](./mobile.md)
 
 ## Ziel
 

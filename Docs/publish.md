@@ -9,6 +9,9 @@ Das Projekt wird über zwei Kanäle bereitgestellt:
 1. Web-App über GitHub Pages
 2. native Desktop-Builds über GitHub Actions
 
+Ein dritter Pfad fuer Mobile-Builds wird lokal vorbereitet und separat dokumentiert unter
+[Docs/mobile.md](/home/konrad/BWI/DG%20Learner/Docs/mobile.md).
+
 Damit können Nutzer:
 
 - die Anwendung direkt im Browser öffnen

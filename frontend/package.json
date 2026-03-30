@@ -9,7 +9,12 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build"
+    "tauri:build": "tauri build",
+    "tauri:android:init": "tauri android init --ci",
+    "tauri:android:dev": "tauri android dev",
+    "tauri:android:apk": "tauri android build --apk",
+    "tauri:android:aab": "tauri android build --aab",
+    "tauri:android:apk:split": "tauri android build --apk --split-per-abi"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.10.1",

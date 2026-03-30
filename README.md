@@ -1,7 +1,7 @@
 # DG Learner
 
 Interaktive Lernanwendung für Bundeswehr-Dienstgrade mit React-Frontend, optionalem FastAPI-Backend,
-PWA-Unterstützung und vorbereitetem Tauri-Setup für native Desktop-Releases.
+PWA-Unterstützung und vorbereitetem Tauri-Setup für native Desktop- und spätere Mobile-Releases.
 
 ## Überblick
 
@@ -23,6 +23,7 @@ Zusätzlich ist eine schlanke Backend-Struktur für spätere API-Erweiterungen v
 - Spaced Repetition für die drei Quiz-Modi
 - installierbare Web-App über Browser
 - native Desktop-Builds über GitHub Actions
+- vorbereiteter Android-Build-Pfad über Tauri Android
 
 ## Lokaler Start
 
@@ -94,6 +95,11 @@ Das Projekt unterstützt zwei Bereitstellungswege:
 - Web-App per GitHub Pages über [deploy-pages.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/deploy-pages.yml)
 - native Desktop-Releases per GitHub Actions über [release-desktop.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/release-desktop.yml)
 
+Zusätzlich ist ein lokaler Mobile-Pfad vorbereitet:
+
+- Android per Tauri Android mit APK/AAB-Builds
+- iOS konzeptionell vorbereitet, aber lokal nur auf macOS mit Xcode buildbar
+
 Der typische Desktop-Release-Flow ist:
 
 ```bash
@@ -127,3 +133,4 @@ Die gepflegte technische Dokumentation liegt unter [Docs/README.md](/home/konrad
 - [Docs/frontend.md](/home/konrad/BWI/DG%20Learner/Docs/frontend.md)
 - [Docs/backend.md](/home/konrad/BWI/DG%20Learner/Docs/backend.md)
 - [Docs/publish.md](/home/konrad/BWI/DG%20Learner/Docs/publish.md)
+- [Docs/mobile.md](/home/konrad/BWI/DG%20Learner/Docs/mobile.md)

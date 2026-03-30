@@ -6,13 +6,11 @@ import FeedbackMessage from "./components/FeedbackMessage";
 import LearningModeSwitch from "./components/LearningModeSwitch";
 import ModeSelector from "./components/ModeSelector";
 import OrganigramBoard from "./components/OrganigramBoard";
-import PwaInstallPanel from "./components/PwaInstallPanel";
 import ProgressPanel from "./components/ProgressPanel";
 import RankImage from "./components/RankImage";
 import ReviewPanel from "./components/ReviewPanel";
 import ShortcutButton from "./components/ShortcutButton";
 import StatsPage from "./components/StatsPage";
-import { usePwaInstall } from "./hooks/usePwaInstall";
 import { usePersistentState } from "./hooks/usePersistentState";
 import { BRANCHES, CATEGORIES, MODES } from "./data/ranks";
 import {
@@ -28,7 +26,6 @@ import {
 
 function App() {
   const { state, setState, reset } = usePersistentState();
-  const { canInstall, install, isInstalled } = usePwaInstall();
   const [inputValue, setInputValue] = useState("");
   const [showOrganigramCompleteDialog, setShowOrganigramCompleteDialog] = useState(false);
   const [pendingAutostart, setPendingAutostart] = useState(false);
@@ -227,6 +224,18 @@ function App() {
         return;
       }
 
+      if (requiresReview && ["1", "2", "3", "4"].includes(event.key)) {
+        event.preventDefault();
+        const ratingByKey = {
+          1: "again",
+          2: "hard",
+          3: "good",
+          4: "easy",
+        };
+        rateLastTask(ratingByKey[event.key]);
+        return;
+      }
+
       if (event.key.toLowerCase() === "h") {
         event.preventDefault();
         setShowOrganigramCompleteDialog(false);
@@ -243,6 +252,7 @@ function App() {
     activeTask,
     setState,
     requiresReview,
+    state.spacedRepetition,
   ]);
 
   const updateSession = (entry) => {
@@ -454,21 +464,6 @@ function App() {
     reset();
     setInputValue("");
     setShowOrganigramCompleteDialog(false);
-  };
-
-  const handleInstall = async () => {
-    const installed = await install();
-    if (!installed) {
-      return;
-    }
-
-    setState((current) => ({
-      ...current,
-      currentFeedback: {
-        status: "correct",
-        message: "Die App wurde zur Installation an den Browser übergeben.",
-      },
-    }));
   };
 
   const downloadBackup = () => {
@@ -711,26 +706,8 @@ function App() {
                       : "Standard"}
                   </dd>
                 </div>
-                <div>
-                  <dt className="text-xs uppercase tracking-[0.25em] text-sand/45">Persistenz</dt>
-                  <dd className="mt-2 text-sm leading-6 text-sand/70">
-                    Fortschritt, aktuelle Aufgabe und Fehlerhistorie werden lokal im Browser gehalten.
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs uppercase tracking-[0.25em] text-sand/45">Installiert</dt>
-                  <dd className="mt-2 text-sm leading-6 text-sand/70">
-                    {isInstalled ? "Ja, die App läuft im App-Modus." : "Noch im Browser-Modus."}
-                  </dd>
-                </div>
               </dl>
             </aside>
-
-            <PwaInstallPanel
-              canInstall={canInstall}
-              isInstalled={isInstalled}
-              onInstall={handleInstall}
-            />
           </div>
         </div>
       ) : (
