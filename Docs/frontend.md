@@ -1,28 +1,27 @@
 # Frontend-Dokumentation
 
-## 1. Zweck des Frontends
+## Zweck
 
-Das Frontend enthält aktuell den gesamten produktiven Kern der Anwendung.
+Das Frontend enthält den aktuell produktiven Kern der Anwendung.
 
 Es übernimmt:
 
-- Rendering der Oberfläche
+- UI und Navigation
 - Auswahl von Modus, Teilstreitkräften und Kategorien
-- Generierung der Aufgaben
-- Auswertung der Antworten
-- lokale Lernstandsverwaltung
+- Aufgabenerzeugung und Auswertung
+- lokale Persistenz
 - Spaced-Repetition-Logik
-- PWA-Verhalten
+- PWA-Installation und Browser-Verhalten
 
-Technologien:
+## Technologien
 
-- React
-- Vite
-- Tailwind CSS
-- Tauri für native Desktop-Builds
-- lokaler Browser-Speicher über `localStorage`
+- React 18
+- Vite 5
+- Tailwind CSS 3
+- Tauri 2 für Desktop-Bundles
+- `localStorage` für lokalen Zustand
 
-## 2. Relevante Frontend-Dateien
+## Relevante Dateien
 
 ### Einstieg
 
@@ -49,23 +48,33 @@ Technologien:
 - [frontend/src/components/RankImage.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/components/RankImage.jsx)
 - [frontend/src/components/OrganigramBoard.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/components/OrganigramBoard.jsx)
 - [frontend/src/components/ReviewPanel.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/components/ReviewPanel.jsx)
+- [frontend/src/components/ProgressPanel.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/components/ProgressPanel.jsx)
+- [frontend/src/components/FeedbackMessage.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/components/FeedbackMessage.jsx)
 - [frontend/src/components/StatsPage.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/components/StatsPage.jsx)
 - [frontend/src/components/PwaInstallPanel.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/components/PwaInstallPanel.jsx)
 - [frontend/src/components/CompletionDialog.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/components/CompletionDialog.jsx)
-- [frontend/src-tauri](/home/konrad/BWI/DG%20Learner/frontend/src-tauri)
+- [frontend/src/components/ShortcutButton.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/components/ShortcutButton.jsx)
 
-## 3. Architektur
+### Desktop-Build-Konfiguration
 
-Das Frontend folgt keinem komplizierten globalen Store, sondern einer bewusst kompakten Architektur:
+- [frontend/src-tauri/tauri.conf.json](/home/konrad/BWI/DG%20Learner/frontend/src-tauri/tauri.conf.json)
+- [frontend/src-tauri/Cargo.toml](/home/konrad/BWI/DG%20Learner/frontend/src-tauri/Cargo.toml)
 
-1. `App.jsx` hält den zentralen UI-Zustand.
-2. `usePersistentState` lädt und speichert diesen Zustand in `localStorage`.
-3. `logic.js` kapselt die wichtigste Fachlogik.
-4. Die UI-Komponenten sind weitgehend zustandsarm und werden über Props angesteuert.
+## Architektur
 
-## 4. Zustandsmodell
+Die Anwendung verwendet bewusst keinen globalen Store.
 
-Der persistierte Zustand wird in `logic.js` über `createInitialState()` definiert.
+Der Aufbau ist:
+
+1. `App.jsx` hält den zentralen UI-Zustand und die View-Steuerung.
+2. `usePersistentState` lädt und speichert den Zustand in `localStorage`.
+3. `logic.js` kapselt die Fachlogik für Aufgaben, Bewertung und Spaced Repetition.
+4. Komponenten bleiben weitgehend präsentationsorientiert und werden per Props versorgt.
+
+## Persistierter Zustand
+
+Der Initialzustand wird in `createInitialState()` aus
+[frontend/src/utils/logic.js](/home/konrad/BWI/DG%20Learner/frontend/src/utils/logic.js) definiert.
 
 Wichtige Felder:
 
@@ -79,69 +88,25 @@ Wichtige Felder:
 - `currentFeedback`
 - `currentView`
 
-### `selectedMode`
+Der Local-Storage-Key ist aktuell `dg-learner-state-v3`.
 
-Definiert den aktiven Lernmodus:
+### Modi
 
 - `image-input`
 - `image-choice`
 - `text-choice`
 - `organigram`
 
-### `selectedLearningMode`
-
-Definiert die Lernlogik:
+### Lernlogik
 
 - `standard`
 - `spaced-repetition`
 
-Wichtig:
+Im Organigramm-Modus wird Spaced Repetition automatisch deaktiviert.
 
-- Im Organigramm-Modus wird Spaced Repetition deaktiviert.
+## Rangdaten
 
-### `selectedBranches`
-
-Auswahl der Teilstreitkräfte:
-
-- `heer`
-- `marine`
-- `luftwaffe`
-
-### `selectedCategories`
-
-Auswahl der Rangkategorien:
-
-- `standard`
-- `offizieranwärter`
-- `sanitätsdienst`
-
-### `session`
-
-Enthält Sitzungs- und Statistikdaten:
-
-- `answered`
-- `correct`
-- `wrong`
-- `helped`
-- `history`
-
-### `spacedRepetition`
-
-Enthält den lokalen Wiederholungsplan:
-
-- `cards`
-- `lastCardKey`
-
-Jede Karte speichert dort z. B.:
-
-- `dueAt`
-- `intervalMinutes`
-- `lastRating`
-- `lastReviewedAt`
-
-## 5. Datenmodell der Rangdaten
-
-Die Rangdaten liegen in [frontend/src/data/ranks.json](/home/konrad/BWI/DG%20Learner/frontend/src/data/ranks.json).
+Die Rohdaten liegen in [frontend/src/data/ranks.json](/home/konrad/BWI/DG%20Learner/frontend/src/data/ranks.json).
 
 Beispiel:
 
@@ -156,126 +121,77 @@ Beispiel:
 }
 ```
 
-### Bedeutung der Felder
+Bedeutung der Felder:
 
 - `name`: Anzeigename des Dienstgrads
 - `branch`: Teilstreitkraft
-- `category`: inhaltliche Kategorie
+- `category`: Lernkategorie
 - `group`: Ranggruppe
-- `order`: Position innerhalb der Kategorie-/Teilstruktur
-- `image`: relativer Bildpfad aus dem `public`-Ordner
+- `order`: Reihenfolge im Schema
+- `image`: relativer Pfad aus `frontend/public`
 
-## 6. IDs und Eindeutigkeit
+In [frontend/src/data/ranks.js](/home/konrad/BWI/DG%20Learner/frontend/src/data/ranks.js) werden daraus:
 
-Interne IDs werden in [frontend/src/data/ranks.js](/home/konrad/BWI/DG%20Learner/frontend/src/data/ranks.js) erzeugt.
+- öffentliche Bildpfade mit `BASE_URL` aufgelöst
+- interne IDs aus `branch`, `category` und normalisiertem Namen erzeugt
 
-Das ist wichtig, weil gleiche Namen mehrfach vorkommen können, z. B.:
+Das verhindert Kollisionen bei gleichlautenden Dienstgraden in mehreren Teilstreitkräften.
 
-- `Gefreiter` in Heer, Marine und Luftwaffe
-- `Leutnant` in Heer und Luftwaffe
+## Lernmodi
 
-Die interne `id` basiert daher nicht nur auf dem Namen, sondern auf:
+### Bild mit Texteingabe
 
-- Teilstreitkraft
-- Kategorie
-- normalisiertem Namen
+- zeigt ein Rangabzeichen
+- erwartet freie Eingabe
+- normalisiert Groß-/Kleinschreibung, Umlaute und Sonderzeichen
 
-Dadurch bleiben Karten fachlich eindeutig.
+### Bild mit Auswahl
 
-## 7. Lernmodi
+- zeigt ein Rangabzeichen
+- bietet vier Textoptionen
+- wählt Distraktoren bevorzugt aus ähnlichem fachlichem Umfeld
 
-### Modus 1: Bild mit Texteingabe
-
-Dateien:
-
-- [frontend/src/App.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/App.jsx)
-- [frontend/src/utils/logic.js](/home/konrad/BWI/DG%20Learner/frontend/src/utils/logic.js)
-
-Verhalten:
-
-- zeigt ein Bild eines Dienstgrads
-- erwartet freie Texteingabe
-- Groß-/Kleinschreibung wird ignoriert
-- Umlaute werden robust normalisiert
-- `Lösung anzeigen` füllt das Textfeld automatisch mit der korrekten Lösung
-
-### Modus 2: Bild mit Auswahl
-
-Verhalten:
-
-- zeigt ein Bild
-- bietet vier Textantworten
-- markiert die richtige Lösung bei Bedarf
-
-Distraktoren werden bevorzugt aus:
-
-- derselben Teilstreitkraft
-- derselben Kategorie
-- ähnlicher Ranggruppe
-- ähnlicher Rangnähe
-
-### Modus 3: Text mit Bildauswahl
-
-Verhalten:
+### Text mit Bildauswahl
 
 - zeigt den Dienstgrad als Text
-- bietet vier Bildoptionen
-- bei `Lösung anzeigen` wird das richtige Bild deutlich markiert
+- bietet mehrere Bildoptionen
 
-### Modus 4: Organigramm einordnen
+### Organigramm einordnen
 
-Verhalten:
+- zeigt ein Rangschema für die aktiven Teilstreitkräfte
+- nutzt ausschließlich `standard`-Ränge
+- verwaltet Platzierungen und Restkarten innerhalb der Aufgabe
 
-- zeigt ein Rangschema
-- Karten werden einem festen Slot zugeordnet
-- Desktop: Drag-and-Drop oder Karte anklicken und Zielslot wählen
+## Spaced Repetition
 
-Wichtig:
+Spaced Repetition ist für die drei Quiz-Modi aktivierbar.
 
-- dieser Modus nutzt immer nur `category: standard`
-- Spezialkategorien werden hier bewusst ausgeschlossen
+Bewertungen:
 
-## 8. Spaced Repetition
+- `again`
+- `hard`
+- `good`
+- `easy`
 
-Spaced Repetition ist für die drei Quiz-Modi aktiviert, nicht für das Organigramm.
+Basisintervalle aus `logic.js`:
 
-### Aktivierung
-
-Die Aktivierung erfolgt über [LearningModeSwitch.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/components/LearningModeSwitch.jsx).
-
-### Bewertungsoptionen
-
-Die Bewertung erfolgt über [ReviewPanel.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/components/ReviewPanel.jsx).
-
-Optionen:
-
-- `Nochmal`
-- `Schlecht`
-- `Gut`
-- `Einfach`
-
-### Grundintervalle
-
-Aktuell in `logic.js` definiert:
-
-- `Nochmal` → 1 Minute
-- `Schlecht` → 6 Minuten
-- `Gut` → 10 Minuten
-- `Einfach` → 3 Tage
+- `again`: 1 Minute
+- `hard`: 6 Minuten
+- `good`: 10 Minuten
+- `easy`: 3 Tage
 
 Zusätzlich:
 
-- bessere Bewertungen verlängern bestehende Intervalle progressiv
-- die gleiche Karte wird nach Möglichkeit nicht direkt zweimal hintereinander gezeigt
+- bestehende Intervalle werden bei `hard`, `good` und `easy` progressiv verlängert
+- die zuletzt bewertete Karte wird nach Möglichkeit nicht sofort erneut gezeigt
 
-## 9. Aufgabenlogik
+## Aufgabenlogik
 
-Die Aufgabenlogik liegt zentral in [frontend/src/utils/logic.js](/home/konrad/BWI/DG%20Learner/frontend/src/utils/logic.js).
+Die zentrale Fachlogik liegt in [frontend/src/utils/logic.js](/home/konrad/BWI/DG%20Learner/frontend/src/utils/logic.js).
 
 Wichtige Funktionen:
 
 - `normalizeAnswer`
-- `shuffle`
 - `getRanksForFilters`
 - `createTask`
 - `gradeTask`
@@ -284,40 +200,47 @@ Wichtige Funktionen:
 - `autoPlaceNext`
 - `applySpacedRepetitionRating`
 
-### `createTask`
+Wesentliche Regeln:
 
-Diese Funktion erzeugt je nach Modus eine neue Aufgabe.
-
-Eingaben:
-
-- Modus
-- gewählte Teilstreitkräfte
-- gewählte Kategorien
-- optionale Lernmodus-Information
-
-Besonderheiten:
-
-- Organigramm erzwingt Standardränge
+- Organigramm erzwingt `standard` als Kategorie
 - Spaced Repetition filtert auf fällige Karten
+- Antwortoptionen werden zufällig gemischt
 
-## 10. Feedback- und Statistiksystem
+## URL-Parameter und Navigation
 
-Feedback wird in `currentFeedback` gespeichert.
+`App.jsx` unterstützt Startparameter über die URL:
 
-Es enthält z. B.:
+- `view=stats`
+- `view=training`
+- `autostart=1`
+- `mode=...`
+- `branches=heer,marine,...`
+- `categories=standard,...`
+- `learning=standard|spaced-repetition`
+
+Damit lassen sich Trainingsansichten direkt vorkonfigurieren.
+
+## Bedienung und Feedback
+
+Das Frontend enthält eine Desktop-orientierte Tastatursteuerung:
+
+- `Enter`: nächste Aufgabe
+- `L`: Lösung anzeigen
+- `H`: zurück zur Startansicht
+
+Feedback wird über `currentFeedback` verwaltet und enthält unter anderem:
 
 - `status`
 - `message`
 - `solution`
-- `slotKey`
 - `awaitingReview`
 
-Die Statistikansicht zeigt:
+Die Sitzungsstatistik erfasst:
 
-- Gesamtanzahl bearbeiteter Aufgaben
+- bearbeitete Aufgaben
 - richtige Antworten
 - falsche Antworten
-- mit Hilfe bearbeitete Aufgaben
+- mit Hilfe gelöste Aufgaben
 - Quoten nach Teilstreitkraft
 - Quoten nach Modus
 - Quoten nach Kategorie

@@ -1,31 +1,23 @@
 # Backend-Dokumentation
 
-## 1. Zweck des Backends
+## Zweck
 
-Das Backend ist aktuell bewusst schlank gehalten und dient vor allem als vorbereitete Struktur
-für spätere Erweiterungen.
+Das Backend ist aktuell bewusst schlank gehalten und dient als vorbereitetes Fundament für spätere
+API-Erweiterungen. Der produktive Schwerpunkt des Projekts liegt derzeit weiterhin im Frontend.
 
-Der derzeitige produktive Schwerpunkt liegt im Frontend.
+## Technologien
 
-Aktuell übernimmt das Backend:
-
-- Health-Check
-- einfache Info-Route
-- Grundgerüst für spätere APIs
-
-Technologien:
-
-- Python
+- Python 3
 - FastAPI
 - Uvicorn
 
-## 2. Relevante Dateien
+## Relevante Dateien
 
 - [backend/app/main.py](/home/konrad/BWI/DG%20Learner/backend/app/main.py)
 - [backend/app/__init__.py](/home/konrad/BWI/DG%20Learner/backend/app/__init__.py)
 - [backend/requirements.txt](/home/konrad/BWI/DG%20Learner/backend/requirements.txt)
 
-## 3. Aktuelle Struktur
+## Aktuelle Struktur
 
 ```text
 backend/
@@ -35,22 +27,34 @@ backend/
   requirements.txt
 ```
 
-## 4. FastAPI-Anwendung
+## Aktuelle Verantwortung
 
-Die FastAPI-App wird in [backend/app/main.py](/home/konrad/BWI/DG%20Learner/backend/app/main.py) erstellt:
+Das Backend stellt momentan nur Basis-Endpunkte bereit:
+
+- Health-Check
+- einfache Info-Route
+- minimales Startgerüst für spätere APIs
+
+Nicht im Backend, sondern aktuell im Frontend umgesetzt:
+
+- Rangdaten-Nutzung
+- Aufgabenlogik
+- Bewertungslogik
+- Spaced Repetition
+- lokale Statistik
+- Persistenz des Lernstands
+
+## FastAPI-App
+
+Die Anwendung wird in [backend/app/main.py](/home/konrad/BWI/DG%20Learner/backend/app/main.py) erzeugt:
 
 ```python
 app = FastAPI(title="DG Learner API", version="0.1.0")
 ```
 
-## 5. Aktuelle Endpunkte
+## Endpunkte
 
 ### `GET /health`
-
-Zweck:
-
-- einfacher Health-Check
-- geeignet für lokale Prüfung oder spätere Deployments
 
 Antwort:
 
@@ -62,10 +66,6 @@ Antwort:
 
 ### `GET /api/info`
 
-Zweck:
-
-- beschreibt, dass das Backend aktuell als Grundgerüst dient
-
 Antwort:
 
 ```json
@@ -74,107 +74,44 @@ Antwort:
 }
 ```
 
-## 6. Installation und Start
+## Lokaler Start
 
-Manuell:
+Direkt:
 
 ```bash
-cd "/home/konrad/BWI/DG Learner/backend"
+cd backend
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-Danach erreichbar unter:
+Danach ist das Backend unter `http://127.0.0.1:8000` erreichbar.
 
-```text
-http://127.0.0.1:8000
-```
+## Start über das Projektskript
 
-## 7. Automatischer Start über das Projektskript
-
-Das Hauptskript [start-test.sh](/home/konrad/BWI/DG%20Learner/start-test.sh) übernimmt für das Backend:
+[start-test.sh](/home/konrad/BWI/DG%20Learner/start-test.sh) übernimmt für das Backend:
 
 - Prüfung auf `python3`
-- Anlegen des virtuellen Environments
-- Installation von `requirements.txt`
-- Start von Uvicorn
+- Erstellen des virtuellen Environments
+- Installation der Abhängigkeiten
+- Start von `uvicorn app.main:app --reload`
 
-## 8. Aktuelle Rolle im Gesamtsystem
+Wenn `python3` fehlt oder keine `requirements.txt` vorhanden wäre, würde das Skript den Backend-Teil
+überspringen oder abbrechen.
 
-Derzeit werden diese Kernbereiche noch nicht vom Backend übernommen:
+## Mögliche Ausbauschritte
 
-- Rangdatenbereitstellung
-- Aufgabenlogik
-- Lernstand
+Sinnvolle nächste Backend-Themen wären:
+
+- Bereitstellung der Rangdaten per API
+- serverseitige Aufgaben- oder Bewertungslogik
+- geräteübergreifende Speicherung des Lernstands
 - Benutzerkonten
-- Statistik
-- Spaced Repetition
+- Import-/Export- und Verwaltungsfunktionen
 
-All das liegt aktuell im Frontend.
+## Wartungshinweise
 
-## 9. Empfohlene spätere Ausbauschritte
-
-Das Backend kann in späteren Projektphasen folgende Aufgaben übernehmen:
-
-- zentrale Bereitstellung der Rangdaten aus JSON oder Datenbank
-- serverseitige Validierung und Aufgabenlogik
-- Synchronisierung des Lernstands zwischen Geräten
-- Benutzerkonten und Login
-- Import-/Export-Funktionen
-- Administrationsoberfläche
-- Pflege von Bild- und Rangdaten
-
-## 10. Sinnvolle zukünftige Struktur
-
-Eine spätere saubere Backend-Struktur könnte so aussehen:
-
-```text
-backend/
-  app/
-    main.py
-    routes/
-    models/
-    services/
-    schemas/
-    data/
-```
-
-Mögliche Inhalte:
-
-- `routes/`: API-Endpunkte
-- `models/`: interne Datenmodelle
-- `schemas/`: Pydantic-Schemas
-- `services/`: Fachlogik
-- `data/`: JSON- oder Importdaten
-
-## 11. Mögliche zukünftige API-Endpunkte
-
-Sinnvolle Kandidaten:
-
-- `GET /api/ranks`
-- `GET /api/ranks/{id}`
-- `GET /api/branches`
-- `GET /api/categories`
-- `POST /api/session/check`
-- `POST /api/session/review`
-- `GET /api/stats`
-
-## 12. Hinweise zur Kopplung mit dem Frontend
-
-Wenn das Backend später aktiv genutzt wird, sollte die Umstellung schrittweise erfolgen:
-
-1. Rangdaten per API bereitstellen
-2. Frontend liest Daten nicht mehr direkt aus lokaler JSON, sondern aus dem Backend
-3. danach Aufgabenlogik optional in Services verschieben
-4. erst zuletzt Persistenz und Benutzerverwaltung serverseitig ergänzen
-
-So bleibt das Projekt auch während des Ausbaus benutzbar.
-
-## 13. Wartungshinweise
-
-- Das virtuelle Environment liegt unter `backend/.venv`
-- Diese Umgebung gehört nicht in die eigentliche Programmlogik
-- Für Änderungen an Abhängigkeiten immer `backend/requirements.txt` aktualisieren
-- Für reale Produktionsnutzung sollte später eine sauberere Deploy-Konfiguration ergänzt werden
+- das lokale virtuelle Environment liegt unter `backend/.venv`
+- Abhängigkeiten werden in [backend/requirements.txt](/home/konrad/BWI/DG%20Learner/backend/requirements.txt) gepflegt
+- für den aktuellen Entwicklungsstand ist das Backend optional, aber lauffähig

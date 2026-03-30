@@ -1,34 +1,33 @@
 # Programmdokumentation
 
-Diese Dokumentation beschreibt den technischen Aufbau des Projekts
-`Learning-Tool Bundeswehr-Dienstgrade`.
+Diese Dokumentation beschreibt den aktuellen technischen Stand von `DG Learner`.
 
-Die Dokumentation ist in zwei Hauptbereiche aufgeteilt:
+## Inhalt
 
 - [Frontend](./frontend.md)
 - [Backend](./backend.md)
-- [Veröffentlichung](./publish.md)
+- [Veröffentlichung und Releases](./publish.md)
 
-## Ziel der Dokumentation
+## Ziel
 
-Die Dokumentation soll es ermöglichen,
+Die Dokumentation soll dabei helfen,
 
-- das Projekt lokal zu starten,
-- den Aufbau des Codes zu verstehen,
-- die Datenstruktur nachzuvollziehen,
-- die Lernlogik zu erweitern,
-- und neue Funktionen kontrolliert einzubauen.
+- das Projekt lokal zu starten
+- die wichtigsten Einstiegspunkte im Code schnell zu finden
+- Datenmodell und Lernlogik nachzuvollziehen
+- Deployment und Release-Abläufe sicher auszuführen
 
-## Projektüberblick
+## Projektstatus
 
-Das Projekt ist als responsive Web-Anwendung umgesetzt.
+Das Projekt ist eine responsive Web-Anwendung mit optionalem Backend und vorbereitetem
+Desktop-Build über Tauri.
 
-Aktueller Schwerpunkt:
+Der aktuelle Schwerpunkt liegt auf:
 
-- interaktive Lernmodi im Frontend
-- lokale Speicherung im Browser
-- PWA-Fähigkeit
-- vorbereitete Backend-Struktur für spätere Erweiterungen
+- Frontend-Logik und UI
+- lokaler Speicherung im Browser
+- PWA-Nutzung im Browser
+- GitHub-basierten Deployments und Desktop-Releases
 
 ## Verzeichnisstruktur
 
@@ -38,42 +37,45 @@ DG Learner/
     README.md
     frontend.md
     backend.md
-
+    publish.md
   frontend/
     public/
     src/
-
+    src-tauri/
   backend/
     app/
-
+    requirements.txt
+  .github/
+    workflows/
   start-test.sh
   README.md
-  howto.md
 ```
+
+Optional können lokal zusätzliche Helferskripte liegen, etwa für Pages-Deployments oder den
+kompletten Desktop-Release-Ablauf. Diese sind nicht Teil der festen Repo-Dokumentationsbasis und
+werden bewusst separat gehalten.
 
 ## Einstiegspunkte
 
-- Frontend-App: [frontend/src/main.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/main.jsx)
-- Haupt-UI: [frontend/src/App.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/App.jsx)
-- Zentrale Frontend-Logik: [frontend/src/utils/logic.js](/home/konrad/BWI/DG%20Learner/frontend/src/utils/logic.js)
+- Frontend-Entry: [frontend/src/main.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/main.jsx)
+- Hauptanwendung: [frontend/src/App.jsx](/home/konrad/BWI/DG%20Learner/frontend/src/App.jsx)
+- Lernlogik: [frontend/src/utils/logic.js](/home/konrad/BWI/DG%20Learner/frontend/src/utils/logic.js)
 - Rangdaten: [frontend/src/data/ranks.json](/home/konrad/BWI/DG%20Learner/frontend/src/data/ranks.json)
-- Backend-App: [backend/app/main.py](/home/konrad/BWI/DG%20Learner/backend/app/main.py)
+- Backend-Entry: [backend/app/main.py](/home/konrad/BWI/DG%20Learner/backend/app/main.py)
+- Startskript: [start-test.sh](/home/konrad/BWI/DG%20Learner/start-test.sh)
 
 ## Lokaler Start
 
-Das empfohlene Startskript liegt im Projektwurzelverzeichnis:
+Für die meisten Fälle reicht:
 
 ```bash
 ./start-test.sh
 ```
 
-Das Skript
+Für Hot Reload:
 
-- prüft Frontend-Abhängigkeiten,
-- installiert sie bei Bedarf,
-- erstellt bei Bedarf ein Python-`venv`,
-- installiert Backend-Abhängigkeiten,
-- startet Frontend als installierbare Vorschau und das Backend,
-- und stellt die App lokal bereit.
+```bash
+./start-test.sh --dev
+```
 
-Details dazu stehen in [howto.md](/home/konrad/BWI/DG%20Learner/howto.md).
+Die fachliche Kurzübersicht steht im Root-[README.md](/home/konrad/BWI/DG%20Learner/README.md).

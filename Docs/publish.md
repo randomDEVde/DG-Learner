@@ -1,169 +1,148 @@
 # Veröffentlichung und Release
 
-Diese Anleitung beschreibt den empfohlenen Weg, das Projekt samt Sourcecode auf GitHub zu
-veröffentlichen und sowohl als Desktop-PWA als auch als nativen Desktop-Download bereitzustellen.
+Diese Anleitung beschreibt den aktuellen Deployment- und Release-Stand des Projekts.
 
-## 1. Zielbild
+## Zielbild
 
-Empfohlen ist diese Kombination:
+Das Projekt wird über zwei Kanäle bereitgestellt:
 
-1. Sourcecode im GitHub-Repository veröffentlichen
-2. Frontend zusätzlich automatisch über GitHub Pages deployen
-3. native Desktop-Builds über GitHub Actions erzeugen
+1. Web-App über GitHub Pages
+2. native Desktop-Builds über GitHub Actions
 
-Damit gibt es:
+Damit können Nutzer:
 
-- einen öffentlichen Code-Stand
-- eine direkt nutzbare Anwendung ohne lokale Entwicklungsumgebung
-- einen einfachen Installationsweg für Desktop über Browser-PWA
-- native Installer und Desktop-Pakete für die drei Zielplattformen
+- die Anwendung direkt im Browser öffnen
+- sie als PWA installieren
+- oder Desktop-Artefakte aus GitHub Releases herunterladen
 
-## 2. Repository vorbereiten
+## Relevante Dateien
 
-Vor dem ersten Push sollte das Repository mindestens enthalten:
+- Pages-Workflow: [deploy-pages.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/deploy-pages.yml)
+- Desktop-Workflow: [release-desktop.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/release-desktop.yml)
+- optionaler lokaler Deploy-Helfer: `./deploy_pages.sh`
+- optionaler lokaler Desktop-Helfer: `./desktop_build.sh`
 
-- den Sourcecode
-- die Dokumentation
-- das Startskript [start-test.sh](/home/konrad/BWI/DG%20Learner/start-test.sh)
-- den Workflow [deploy-pages.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/deploy-pages.yml)
-- den Workflow [release-desktop.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/release-desktop.yml)
+## GitHub Pages
 
-## 3. Repository auf GitHub anlegen
+### Aktivierung
 
-Typischer Ablauf:
+Im GitHub-Repository unter `Settings` -> `Pages` muss als Quelle `GitHub Actions` gewählt sein.
 
-```bash
-git init
-git add .
-git commit -m "Initial release"
-git branch -M main
-git remote add origin https://github.com/schmitzkonrad-hub/DG-Learner.git
-git push -u origin main
-```
+### Verhalten
 
-## 4. GitHub Pages aktivieren
+Der Workflow [deploy-pages.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/deploy-pages.yml):
 
-Im Repository auf GitHub:
-
-1. `Settings`
-2. `Pages`
-3. bei `Source` die Option `GitHub Actions` wählen
-
-Danach übernimmt der vorhandene Workflow das Deployment bei Pushes auf `main`.
-
-## 5. GitHub Pages Workflow
-
-Der Workflow unter [deploy-pages.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/deploy-pages.yml):
-
-- checkt das Repository aus
-- installiert die Frontend-Abhängigkeiten
+- läuft bei Pushes auf `main`
+- kann zusätzlich manuell über `workflow_dispatch` gestartet werden
+- installiert Frontend-Abhängigkeiten mit `npm ci`
 - baut das Frontend
-- lädt `frontend/dist` als Pages-Artefakt hoch
-- deployed die Seite nach GitHub Pages
+- veröffentlicht `frontend/dist` nach GitHub Pages
 
-## 6. Native Desktop-Releases
+### Erneutes Deployment
 
-Für native Builds ist zusätzlich der Workflow
-[release-desktop.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/release-desktop.yml)
-vorhanden.
+Ein erneutes Pages-Deployment kann auf drei Wegen angestoßen werden:
 
-Er erzeugt:
+1. neuer Push auf `main`
+2. `Run workflow` in GitHub Actions
+3. `Re-run jobs` für einen vorhandenen Lauf
 
-- Windows als `.exe`
-- Linux als `.deb` und `AppImage`
-- macOS als App-Bundle und `DMG`
-
-Der Workflow läuft bei:
-
-- Tags wie `v0.1.0`
-- oder manuell über `workflow_dispatch`
-
-Empfohlener Release-Ablauf:
+Ein leerer Commit reicht dafür aus:
 
 ```bash
-./prepare-release.sh 0.1.0
-git add .
-git commit -m "Prepare release v0.1.0"
+git checkout main
+git pull origin main
+git commit --allow-empty -m "Trigger pages redeploy"
 git push origin main
-git tag v0.1.0
-git push origin v0.1.0
 ```
 
-Der Helfer [prepare-release.sh](/home/konrad/BWI/DG%20Learner/prepare-release.sh) synchronisiert die
-Versionsnummer vor dem Tagging automatisch in:
+Wenn der lokale Helfer verwendet wird, genügt:
+
+```bash
+./deploy_pages.sh
+```
+
+Für ein Redeploy ohne inhaltliche Änderung:
+
+```bash
+./deploy_pages.sh --empty-commit
+```
+
+## Native Desktop-Releases
+
+Der Workflow [release-desktop.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/release-desktop.yml)
+baut:
+
+- Windows als NSIS-Installer `.exe`
+- Linux als `.deb` und `AppImage`
+- macOS als `.app` und `DMG`
+
+### Trigger
+
+Der Workflow startet:
+
+- automatisch bei Git-Tags im Format `v*`
+- optional manuell über GitHub Actions
+
+Der verlässlichste Release-Weg im Projekt ist aktuell der Tag-basierte Ablauf.
+
+### Release-Vorbereitung
+
+Vor dem Release müssen die Versionsnummern synchron in diesen Dateien aktualisiert werden:
 
 - [frontend/src-tauri/tauri.conf.json](/home/konrad/BWI/DG%20Learner/frontend/src-tauri/tauri.conf.json)
 - [frontend/src-tauri/Cargo.toml](/home/konrad/BWI/DG%20Learner/frontend/src-tauri/Cargo.toml)
 - [frontend/package.json](/home/konrad/BWI/DG%20Learner/frontend/package.json)
 
-Danach erstellt GitHub Actions einen Draft-Release mit den gebauten Desktop-Artefakten.
+`desktop_build.sh` übernimmt diese Synchronisierung bereits automatisch.
 
-Für dieses Repository konkret:
+### Empfohlener Release-Ablauf
 
-- Repository: `https://github.com/schmitzkonrad-hub/DG-Learner`
-- Workflow: `Actions` -> `Build Desktop Releases`
-- EXE-Download nach erfolgreichem Lauf: `Releases` -> Draft-Release öffnen -> `.exe` herunterladen oder Release veröffentlichen
-
-Wenn bereits ein Commit-Stand auf `main` liegt, reicht für den nächsten EXE-Build also:
+Mit lokalem Helferskript:
 
 ```bash
-./prepare-release.sh 0.1.0
-git add .
-git commit -m "Prepare release v0.1.0"
+./deploy_pages.sh
+./desktop_build.sh 0.1.2
+```
+
+Manueller Fallback:
+
+```bash
+perl -0pi -e 's/"version":\s*"[^"]+"/"version": "0.1.2"/' frontend/src-tauri/tauri.conf.json
+perl -0pi -e 's/version = "[^"]+"/version = "0.1.2"/' frontend/src-tauri/Cargo.toml
+perl -0pi -e 's/"version":\s*"[^"]+"/"version": "0.1.2"/' frontend/package.json
+git add frontend/src-tauri/tauri.conf.json frontend/src-tauri/Cargo.toml frontend/package.json
+git commit -m "Prepare release v0.1.2"
 git push origin main
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.1.2
+git push origin v0.1.2
 ```
 
-## 7. Installation für Endnutzer
+Danach erstellt GitHub Actions einen Draft-Release mit den erzeugten Artefakten.
 
-Nach dem Deployment können Nutzer:
+### Wo liegen die Artefakte?
 
-1. die GitHub-Pages-URL öffnen
-2. die App in Chrome oder Edge öffnen
-3. `App installieren` wählen
+Nach erfolgreichem Lauf:
 
-Damit läuft die Anwendung als Desktop-PWA in einem eigenen Fenster.
-
-Für native Downloads nutzen Endnutzer stattdessen die Release-Artefakte:
-
-- unter Windows bevorzugt die `.exe`
-- unter Linux `.deb` oder `AppImage`
-- unter macOS das `DMG` oder das rohe App-Bundle
-
-Empfohlen fuer externe Windows-Nutzer:
-
-1. GitHub-Repository oeffnen
+1. GitHub-Repository öffnen
 2. `Releases` aufrufen
-3. die aktuelle `.exe` herunterladen
-4. Installer ausfuehren
+3. Draft-Release `DG Learner v<version>` öffnen
+4. gewünschtes Artefakt herunterladen
 
-## 8. Lokaler Start für Entwickler
+Typische Download-Ziele:
 
-Wer das Repository lokal klont, startet am einfachsten so:
+- Windows: `.exe`
+- Linux: `.deb` oder `AppImage`
+- macOS: `.dmg`
 
-```bash
-cd "<projektordner>"
-./start-test.sh
-```
+## Lokale Builds
 
-Für Hot Reload:
+Lokale Tauri-Builds sind möglich, aber nicht der primäre dokumentierte Release-Weg.
 
-```bash
-./start-test.sh --dev
-```
+Dafür werden zusätzlich benötigt:
 
-## 9. Wichtige Abgrenzung
+- Rust-Toolchain
+- Tauri-CLI
+- plattformspezifische Systemabhängigkeiten
 
-Die native Build-Pipeline ist im Repository vorbereitet und für GitHub Actions ausgelegt.
-
-Lokal gilt:
-
-- für `tauri:build` werden Rust und die jeweiligen Plattform-Werkzeuge benötigt
-- Windows-Builds inklusive `.exe` werden auf einem Windows-System oder dem Windows-GitHub-Runner erzeugt
-- macOS-Builds werden auf macOS erzeugt
-- Linux-Builds werden auf Linux erzeugt
-
-Zusätzlicher Hinweis:
-
-- der Windows-Installer wird jetzt als NSIS-Setup erzeugt und als `.exe` im GitHub-Release bereitgestellt
+Der CI-Workflow installiert die Linux-Abhängigkeiten bereits selbst auf dem Runner. Für Releases ist
+deshalb GitHub Actions die bevorzugte Variante.

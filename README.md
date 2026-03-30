@@ -1,49 +1,32 @@
-# Learning-Tool Bundeswehr-Dienstgrade
+# DG Learner
 
-Responsive Lernanwendung als MVP mit:
+Interaktive Lernanwendung für Bundeswehr-Dienstgrade mit React-Frontend, optionalem FastAPI-Backend,
+PWA-Unterstützung und vorbereitetem Tauri-Setup für native Desktop-Releases.
 
-- React + Vite + Tailwind im Frontend
-- Tauri-Setup für native Desktop-Builds
-- vorbereitetem FastAPI-Backend
+## Überblick
+
+Der aktuelle Produktschwerpunkt liegt auf dem Frontend. Dort laufen:
+
+- die Lernmodi
+- die Aufgabenlogik
+- die lokale Fortschrittsspeicherung
+- die Statistikansicht
+- die PWA-Installation
+
+Zusätzlich ist eine schlanke Backend-Struktur für spätere API-Erweiterungen vorhanden.
+
+## Funktionsumfang
+
 - vier Lernmodi inklusive Organigramm
-- lokaler Speicherung per `localStorage`
-- Statistikansicht
-- Desktop-PWA zur lokalen Installation
+- Auswahl nach Teilstreitkraft und Kategorie
+- lokaler Lernstand via `localStorage`
+- Spaced Repetition für die drei Quiz-Modi
+- installierbare Web-App über Browser
+- native Desktop-Builds über GitHub Actions
 
-## Produktstrategie
+## Lokaler Start
 
-Die Web-App bleibt bewusst der Hauptpfad des Projekts.
-
-Warum das für diesen Use Case sinnvoll ist:
-
-- ein gemeinsamer Codepfad für Entwicklung und Nutzung
-- sehr einfache Bereitstellung über Browser oder GitHub Pages
-- lokale Installation auf dem Desktop trotzdem möglich
-- der native Desktop-Wrapper ist nur eine zusätzliche Verpackung, nicht die fachliche Hauptbasis
-
-## Hinweis zum Datenstand
-
-Die App bringt eine gepflegte Rangdatenbasis und echte Bilddateien fuer die hinterlegten
-Dienstgrade unter `frontend/public/images/...` mit.
-
-Falls spaeter weitere Ränge ergänzt werden, muessen die Bilddateien 1:1 passend zu den Pfaden in
-`frontend/src/data/ranks.json` hinterlegt werden.
-
-## Desktop-Installation
-
-Die Web-App ist als installierbare Desktop-PWA vorbereitet:
-
-- Chrome oder Edge oeffnen
-- die laufende App aufrufen
-- `App installieren` waehlen
-
-Voraussetzung fuer die Installation ist ein Aufruf ueber `localhost` oder HTTPS.
-
-Die native Desktop-App über Tauri ergänzt diesen Weg, ersetzt ihn aber nicht.
-
-## Schnellstart
-
-Empfohlen:
+Der empfohlene Einstieg ist das Projektskript [start-test.sh](/home/konrad/BWI/DG%20Learner/start-test.sh):
 
 ```bash
 ./start-test.sh
@@ -51,98 +34,96 @@ Empfohlen:
 
 Das Skript:
 
-- installiert fehlende Frontend-Abhaengigkeiten automatisch
-- startet das Backend bei vorhandenem Python-Setup mit
-- baut das Frontend als installierbare Vorschau
-- stellt die App lokal bereit
+- prüft `node` und `npm`
+- installiert Frontend-Abhängigkeiten bei Bedarf
+- legt bei vorhandenem Python ein Backend-`venv` an
+- installiert Backend-Abhängigkeiten bei Bedarf
+- startet das Backend unter `http://127.0.0.1:8000`
+- baut das Frontend und stellt es unter `http://localhost:5173` bereit
 
-Fuer Hot Reload in der Entwicklung:
+Für Entwicklung mit Hot Reload:
 
 ```bash
 ./start-test.sh --dev
 ```
 
-Hinweis:
+Hinweise:
 
-- im Dev-Modus erscheint der PWA-Installationsbutton im Browser oft nicht
-- fuer die Desktop-Installation ist `./start-test.sh` ohne `--dev` der richtige Weg
+- der PWA-Installationsbutton erscheint typischerweise nur im Preview-/Produktionsmodus
+- das Skript öffnet keinen Browser automatisch
 
-## Veröffentlichen auf GitHub
+## PWA-Nutzung
 
-Es gibt zwei sinnvolle Wege:
+Die Web-App kann in Chrome oder Edge als Desktop-PWA installiert werden.
 
-1. Sourcecode im Repository bereitstellen
-2. die Web-App zusaetzlich ueber GitHub Pages deployen und von dort als PWA installieren
-3. native Desktop-Builds ueber GitHub Actions erzeugen
+Voraussetzungen:
 
-Damit koennen Nutzer:
+- Aufruf über `localhost` oder HTTPS
+- Frontend läuft im Preview-/Deployment-Modus
 
-- den Sourcecode direkt auf GitHub einsehen oder klonen
-- oder die laufende Desktop-Web-App oeffnen und installieren
-- oder einen nativen Desktop-Installer herunterladen
+Typischer Ablauf:
 
-Der Build ist jetzt bewusst so aufgebaut, dass er auch unter Unterpfaden robust laeuft, was fuer
-GitHub Pages wichtig ist.
+1. `./start-test.sh` starten
+2. `http://localhost:5173` im Browser öffnen
+3. `App installieren` wählen
 
-Eine konkrete Schritt-fuer-Schritt-Anleitung liegt hier:
+## Projektstruktur
 
-- [Docs/publish.md](/home/konrad/BWI/DG%20Learner/Docs/publish.md)
+```text
+DG Learner/
+  Docs/
+    README.md
+    frontend.md
+    backend.md
+    publish.md
+  backend/
+    app/
+    requirements.txt
+  frontend/
+    public/
+    src/
+    src-tauri/
+  start-test.sh
+  README.md
+```
 
-## Native Desktop-Builds
+## Veröffentlichung
 
-Das Repository ist jetzt auch fuer native Desktop-Builds vorbereitet:
+Das Projekt unterstützt zwei Bereitstellungswege:
 
-- Windows: bevorzugt als `.exe`
-- Linux: als `.deb` und `AppImage`
-- macOS: als `DMG`
+- Web-App per GitHub Pages über [deploy-pages.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/deploy-pages.yml)
+- native Desktop-Releases per GitHub Actions über [release-desktop.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/release-desktop.yml)
 
-Der empfohlene Weg fuer externe Windows-Nutzer ist:
-
-1. Release-Version vorbereiten
-2. Git-Tag pushen
-3. GitHub Actions baut automatisch die `.exe`
-4. Nutzer laden die `.exe` unter `Releases`
-
-Das Tauri-Setup liegt unter:
-
-- [frontend/src-tauri](/home/konrad/BWI/DG%20Learner/frontend/src-tauri)
-
-Der Release-Workflow liegt unter:
-
-- [release-desktop.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/release-desktop.yml)
-
-Ein lokaler Helfer zum Synchronisieren der Release-Version liegt hier:
-
-- [prepare-release.sh](/home/konrad/BWI/DG%20Learner/prepare-release.sh)
-
-Beispiel:
+Der typische Desktop-Release-Flow ist:
 
 ```bash
-./prepare-release.sh 0.1.1
-git add .
-git commit -m "Prepare release v0.1.1"
+./deploy_pages.sh
+./desktop_build.sh 0.1.2
+```
+
+Dabei gilt:
+
+- `deploy_pages.sh` stößt das GitHub-Pages-Deployment für `main` an
+- `desktop_build.sh` übernimmt Versionsupdate, Commit, Push und Tag-Push
+- der Tag startet den Desktop-Workflow für Windows, Linux und macOS
+
+Falls die lokalen Helferskripte nicht genutzt werden sollen, bleibt der manuelle Fallback:
+
+```bash
+perl -0pi -e 's/"version":\s*"[^"]+"/"version": "0.1.2"/' frontend/src-tauri/tauri.conf.json
+perl -0pi -e 's/version = "[^"]+"/version = "0.1.2"/' frontend/src-tauri/Cargo.toml
+perl -0pi -e 's/"version":\s*"[^"]+"/"version": "0.1.2"/' frontend/package.json
+git add frontend/src-tauri/tauri.conf.json frontend/src-tauri/Cargo.toml frontend/package.json
+git commit -m "Prepare release v0.1.2"
 git push origin main
-git tag v0.1.1
-git push origin v0.1.1
+git tag v0.1.2
+git push origin v0.1.2
 ```
 
-## Start
+## Dokumentation
 
-### Frontend
+Die gepflegte technische Dokumentation liegt unter [Docs/README.md](/home/konrad/BWI/DG%20Learner/Docs/README.md):
 
-```bash
-cd frontend
-npm install
-npm run build
-npm run preview -- --port 5173
-```
-
-### Backend
-
-```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
+- [Docs/frontend.md](/home/konrad/BWI/DG%20Learner/Docs/frontend.md)
+- [Docs/backend.md](/home/konrad/BWI/DG%20Learner/Docs/backend.md)
+- [Docs/publish.md](/home/konrad/BWI/DG%20Learner/Docs/publish.md)
