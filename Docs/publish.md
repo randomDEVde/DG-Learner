@@ -77,7 +77,7 @@ baut:
 
 - Windows als NSIS-Installer `.exe`
 - Linux als `.deb` und `AppImage`
-- macOS als `.app` und `DMG`
+- macOS als universelle `.app` und `DMG` fuer Intel und Apple Silicon
 
 ### Trigger
 
@@ -136,6 +136,11 @@ Typische Download-Ziele:
 - Windows: `.exe`
 - Linux: `.deb` oder `AppImage`
 - macOS: `.dmg`
+
+Hinweis zu macOS:
+
+- der Workflow baut macOS mit `--target universal-apple-darwin`
+- dadurch ist der Download fuer Intel-Macs und Apple-Silicon-Macs geeignet
 
 ## Lokale Builds
 

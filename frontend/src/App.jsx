@@ -655,9 +655,7 @@ function App() {
                   <p className="text-sm uppercase tracking-[0.25em] text-sand/55">Backup</p>
                   <h3 className="mt-2 text-xl font-semibold text-white">Lernstand sichern oder wiederherstellen</h3>
                   <p className="mt-2 max-w-2xl text-sm leading-6 text-sand/70">
-                    Das Backup wird als JSON gespeichert. Das ist fuer diesen Anwendungsfall sinnvoller
-                    als CSV, weil Auswahl, Statistik, Spaced-Repetition-Daten und Einstellungen
-                    vollstaendig wiederhergestellt werden koennen.
+                    Das Backup wird als JSON gespeichert.
                   </p>
                   <div className="mt-5 flex flex-wrap gap-3">
                     <button

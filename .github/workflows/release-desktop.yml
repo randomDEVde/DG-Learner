@@ -20,7 +20,7 @@ jobs:
           - platform: windows-latest
             args: --bundles nsis
           - platform: macos-latest
-            args: --bundles app,dmg
+            args: --target universal-apple-darwin --bundles app,dmg
 
     runs-on: ${{ matrix.platform }}
 
@@ -37,6 +37,10 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
+
+      - name: Install macOS Rust Targets
+        if: matrix.platform == 'macos-latest'
+        run: rustup target add aarch64-apple-darwin x86_64-apple-darwin
 
       - name: Install Linux Dependencies
         if: matrix.platform == 'ubuntu-22.04'

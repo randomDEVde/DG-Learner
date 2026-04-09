@@ -100,6 +100,10 @@ Zusätzlich ist ein lokaler Mobile-Pfad vorbereitet:
 - Android per Tauri Android mit APK/AAB-Builds
 - iOS konzeptionell vorbereitet, aber lokal nur auf macOS mit Xcode buildbar
 
+Fuer Android gibt es jetzt auch einen GitHub-Actions-Workflow unter
+[android-apk.yml](/home/konrad/BWI/DG%20Learner/.github/workflows/android-apk.yml), der APKs bei
+Tags oder manuell baut und als Artefakte bereitstellt.
+
 Der typische Desktop-Release-Flow ist:
 
 ```bash
@@ -112,6 +116,7 @@ Dabei gilt:
 - `deploy_pages.sh` stößt das GitHub-Pages-Deployment für `main` an
 - `desktop_build.sh` übernimmt Versionsupdate, Commit, Push und Tag-Push
 - der Tag startet den Desktop-Workflow für Windows, Linux und macOS
+- der macOS-Release wird als universelles Bundle fuer Intel und Apple Silicon gebaut
 
 Falls die lokalen Helferskripte nicht genutzt werden sollen, bleibt der manuelle Fallback:
 

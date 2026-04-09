@@ -33,9 +33,9 @@
   { "name": "Oberstabsarzt", "branch": "heer", "category": "sanitätsdienst", "group": "sanitaet", "order": 4, "image": "/images/heer/oberstabsarzt.png" },
   { "name": "Oberfeldarzt", "branch": "heer", "category": "sanitätsdienst", "group": "sanitaet", "order": 5, "image": "/images/heer/oberfeldarzt.png" },
   { "name": "Oberstarzt", "branch": "heer", "category": "sanitätsdienst", "group": "sanitaet", "order": 6, "image": "/images/heer/oberstarzt.png" },
-  { "name": "Generalstabsarzt", "branch": "heer", "category": "sanitätsdienst", "group": "sanitaet", "order": 7, "image": "/images/heer/generalstabsarzt.png" },
-  { "name": "Generaloberstabsarzt", "branch": "heer", "category": "sanitätsdienst", "group": "sanitaet", "order": 8, "image": "/images/heer/generaloberstabsarzt.png" },
-  { "name": "Generalarzt", "branch": "heer", "category": "sanitätsdienst", "group": "sanitaet", "order": 9, "image": "/images/heer/generalarzt.png" },
+  { "name": "Generalarzt", "branch": "heer", "category": "sanitätsdienst", "group": "sanitaet", "order": 7, "image": "/images/heer/generalarzt.png" },
+  { "name": "Generalstabsarzt", "branch": "heer", "category": "sanitätsdienst", "group": "sanitaet", "order": 8, "image": "/images/heer/generalstabsarzt.png" },
+  { "name": "Generaloberstabsarzt", "branch": "heer", "category": "sanitätsdienst", "group": "sanitaet", "order": 9, "image": "/images/heer/generaloberstabsarzt.png" },
 
   { "name": "Matrose", "branch": "marine", "category": "standard", "group": "mannschaften", "order": 1, "image": "/images/marine/matrose.png" },
   { "name": "Gefreiter", "branch": "marine", "category": "standard", "group": "mannschaften", "order": 2, "image": "/images/marine/gefreiter.png" },
@@ -69,11 +69,11 @@
   { "name": "Sanitätsoberleutnant zur See", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 2, "image": "/images/marine/sanitaetsoberleutnant_zur_see.png" },
   { "name": "Stabsarzt", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 3, "image": "/images/marine/stabsarzt.png" },
   { "name": "Oberstabsarzt", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 4, "image": "/images/marine/oberstabsarzt.png" },
-  { "name": "Flottenarzt", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 5, "image": "/images/marine/flottenarzt.png" },
-  { "name": "Flottillenarzt", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 6, "image": "/images/marine/flottillenarzt.png" },
-  { "name": "Admiralstabsarzt", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 7, "image": "/images/marine/admiralstabsarzt.png" },
-  { "name": "Admiraloberstabsarzt", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 8, "image": "/images/marine/admiraloberstabsarzt.png" },
-  { "name": "Admiralarzt", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 9, "image": "/images/marine/admiralarzt.png" },
+  { "name": "Flottillenarzt", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 5, "image": "/images/marine/flottillenarzt.png" },
+  { "name": "Flottenarzt", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 6, "image": "/images/marine/flottenarzt.png" },
+  { "name": "Admiralarzt", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 7, "image": "/images/marine/admiralarzt.png" },
+  { "name": "Admiralstabsarzt", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 8, "image": "/images/marine/admiralstabsarzt.png" },
+  { "name": "Admiraloberstabsarzt", "branch": "marine", "category": "sanitätsdienst", "group": "sanitaet", "order": 9, "image": "/images/marine/admiraloberstabsarzt.png" },
 
   { "name": "Flieger", "branch": "luftwaffe", "category": "standard", "group": "mannschaften", "order": 1, "image": "/images/luftwaffe/flieger.png" },
   { "name": "Gefreiter", "branch": "luftwaffe", "category": "standard", "group": "mannschaften", "order": 2, "image": "/images/luftwaffe/gefreiter.png" },
@@ -109,7 +109,7 @@
   { "name": "Oberstabsarzt", "branch": "luftwaffe", "category": "sanitätsdienst", "group": "sanitaet", "order": 4, "image": "/images/luftwaffe/oberstabsarzt.png" },
   { "name": "Oberfeldarzt", "branch": "luftwaffe", "category": "sanitätsdienst", "group": "sanitaet", "order": 5, "image": "/images/luftwaffe/oberfeldarzt.png" },
   { "name": "Oberstarzt", "branch": "luftwaffe", "category": "sanitätsdienst", "group": "sanitaet", "order": 6, "image": "/images/luftwaffe/oberstarzt.png" },
-  { "name": "Generalstabsarzt", "branch": "luftwaffe", "category": "sanitätsdienst", "group": "sanitaet", "order": 7, "image": "/images/luftwaffe/generalstabsarzt.png" },
-  { "name": "Generaloberstabsarzt", "branch": "luftwaffe", "category": "sanitätsdienst", "group": "sanitaet", "order": 8, "image": "/images/luftwaffe/generaloberstabsarzt.png" },
-  { "name": "Generalarzt", "branch": "luftwaffe", "category": "sanitätsdienst", "group": "sanitaet", "order": 9, "image": "/images/luftwaffe/generalarzt.png" }
+  { "name": "Generalarzt", "branch": "luftwaffe", "category": "sanitätsdienst", "group": "sanitaet", "order": 7, "image": "/images/luftwaffe/generalarzt.png" },
+  { "name": "Generalstabsarzt", "branch": "luftwaffe", "category": "sanitätsdienst", "group": "sanitaet", "order": 8, "image": "/images/luftwaffe/generalstabsarzt.png" },
+  { "name": "Generaloberstabsarzt", "branch": "luftwaffe", "category": "sanitätsdienst", "group": "sanitaet", "order": 9, "image": "/images/luftwaffe/generaloberstabsarzt.png" }
 ]

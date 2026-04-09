@@ -48,12 +48,12 @@ export const CATEGORIES = [
   {
     id: "offizieranwärter",
     label: "Offizieranwärter",
-    description: "Anwärter- und Kadettenränge für spätere Offiziere.",
+    description: "Vereinfachte Auswahl markanter OA-Sonderbezeichnungen und Kadettenränge.",
   },
   {
     id: "sanitätsdienst",
     label: "Sanitätsdienst",
-    description: "Dienstgrade des Sanitätsdienstes.",
+    description: "Vereinfachte Auswahl der Sanitätsoffizier-Dienstgrade mit Arztbezeichnungen.",
   },
 ];
 
