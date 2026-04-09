@@ -1,6 +1,6 @@
 [package]
 name = "dg-learner"
-version = "1.0.1"
+version = "1.0.2"
 description = "Desktop-Lernanwendung für Bundeswehr-Dienstgrade"
 authors = ["Konrad"]
 edition = "2021"
